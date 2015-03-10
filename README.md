@@ -1,6 +1,8 @@
 # DesignOptionModifier
 Stand-alone executable using UI Automation to read and modify Revit Design Options, described in detail by
-[The Building Coder](http://thebuildingcoder.typepad.com).
+[The Building Coder](http://thebuildingcoder.typepad.com) article
+[	List and Switch Design Options Using UI Automation](http://thebuildingcoder.typepad.com/blog/2015/03/list-and-switch-design-options-using-ui-automation.html).
+
 
 Revitalizer says:
 
