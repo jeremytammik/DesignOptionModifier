@@ -10,7 +10,9 @@ This is a stand-alone application that gets and sets DesignOptions.
 
 Since it works very, very slowly, it is not too useful for everyday professional work.
 
-![Image](img/DesignOptionModifier_main_form.png)
+<p align="center">
+<img src="img/DesignOptionModifier_main_form.png"/>
+</p>
 
 It just reads and sets the ComboBox, but reading the items requires expanding them all first, which costs several seconds each time.
 
