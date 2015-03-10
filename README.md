@@ -16,7 +16,9 @@ Since it works very, very slowly, it is not too useful for everyday professional
 
 It just reads and sets the ComboBox, but reading the items requires expanding them all first, which costs several seconds each time.
 
-![Image](img/DesignOptionModifier_revit.png)
+<p align="center">
+<img src="img/DesignOptionModifier_revit.png"/>
+</p>
 
 To test it, just start a Revit project containing a few DesignOptions.
 
