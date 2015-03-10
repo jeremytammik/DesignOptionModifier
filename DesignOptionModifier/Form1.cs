@@ -18,33 +18,33 @@ namespace DesignOptionModifier
 
     [DllImport( "user32.dll" )]
     [return: MarshalAs( UnmanagedType.Bool )]
-    public static extern bool SetForegroundWindow( 
+    public static extern bool SetForegroundWindow(
       IntPtr hWnd );
 
     [DllImport( "user32.dll", SetLastError = true, CharSet = CharSet.Auto )]
-    static extern int GetWindowText( 
-      IntPtr hWnd, [Out] StringBuilder lpString, 
+    static extern int GetWindowText(
+      IntPtr hWnd, [Out] StringBuilder lpString,
       int nMaxCount );
 
     [DllImport( "user32.dll", SetLastError = true, CharSet = CharSet.Auto )]
-    static extern int GetWindowTextLength( 
+    static extern int GetWindowTextLength(
       IntPtr hWnd );
 
     [DllImport( "user32.dll" )]
     [return: MarshalAs( UnmanagedType.Bool )]
-    public static extern bool EnumChildWindows( 
+    public static extern bool EnumChildWindows(
       IntPtr window, EnumWindowProc callback, IntPtr i );
 
     [DllImport( "user32.dll", EntryPoint = "GetClassName" )]
-    public static extern int GetClass( 
+    public static extern int GetClass(
       IntPtr hWnd, StringBuilder className, int nMaxCount );
 
-    public delegate bool EnumWindowProc( 
+    public delegate bool EnumWindowProc(
       IntPtr hWnd, IntPtr parameter );
 
     [DllImport( "user32.dll", SetLastError = true )]
     [return: MarshalAs( UnmanagedType.Bool )]
-    private static extern bool GetWindowRect( 
+    private static extern bool GetWindowRect(
       IntPtr hWnd, out RECT lpRect );
 
     public static string GetText( IntPtr hWnd )
@@ -55,8 +55,8 @@ namespace DesignOptionModifier
       return sb.ToString();
     }
 
-    private static bool EnumWindow( 
-      IntPtr handle, 
+    private static bool EnumWindow(
+      IntPtr handle,
       IntPtr pointer )
     {
       GCHandle gch = GCHandle.FromIntPtr( pointer );
@@ -68,7 +68,7 @@ namespace DesignOptionModifier
       return true;
     }
 
-    public static List<IntPtr> GetChildWindows( 
+    public static List<IntPtr> GetChildWindows(
       IntPtr parent )
     {
       List<IntPtr> result = new List<IntPtr>();
@@ -107,8 +107,8 @@ namespace DesignOptionModifier
       GetComboBox();
     }
 
-    private void button_ok_Click( 
-      object sender, 
+    private void button_ok_Click(
+      object sender,
       EventArgs e )
     {
       Close();
@@ -118,39 +118,39 @@ namespace DesignOptionModifier
     {
       int maxX = -1;
 
-      Process[] revits = Process.GetProcessesByName( 
+      Process[] revits = Process.GetProcessesByName(
         "Revit" );
 
       IntPtr cb = IntPtr.Zero;
 
       if( revits.Length > 0 )
       {
-        List<IntPtr> children = GetChildWindows( 
+        List<IntPtr> children = GetChildWindows(
           revits[0].MainWindowHandle );
 
         foreach( IntPtr child in children )
         {
-          StringBuilder classNameBuffer 
+          StringBuilder classNameBuffer
             = new StringBuilder( 100 );
 
-          int className = GetClass( child, 
+          int className = GetClass( child,
             classNameBuffer, 100 );
 
-          if( classNameBuffer.ToString().Contains( 
+          if( classNameBuffer.ToString().Contains(
             "msctls_statusbar32" ) )
           {
-            List<IntPtr> grandChildren 
+            List<IntPtr> grandChildren
               = GetChildWindows( child );
 
             foreach( IntPtr grandChild in grandChildren )
             {
-              StringBuilder classNameBuffer2 
+              StringBuilder classNameBuffer2
                 = new StringBuilder( 100 );
 
-              int className2 = GetClass( grandChild, 
+              int className2 = GetClass( grandChild,
                 classNameBuffer2, 100 );
 
-              if( classNameBuffer2.ToString().Contains( 
+              if( classNameBuffer2.ToString().Contains(
                 "ComboBox" ) )
               {
                 RECT r;
@@ -173,21 +173,21 @@ namespace DesignOptionModifier
 
       if( cb != IntPtr.Zero )
       {
-        comboBoxElement = AutomationElement.FromHandle( 
+        comboBoxElement = AutomationElement.FromHandle(
           cb );
       }
     }
 
-    private void buttonGet_Click( 
-      object sender, 
+    private void buttonGet_Click(
+      object sender,
       EventArgs e )
     {
-      if( ( comboBoxElement != null ) 
+      if( ( comboBoxElement != null )
         && ( comboBoxElement.Current.IsEnabled ) )
       {
-        ExpandCollapsePattern expandPattern 
+        ExpandCollapsePattern expandPattern
           = (ExpandCollapsePattern) comboBoxElement
-            .GetCurrentPattern( 
+            .GetCurrentPattern(
               ExpandCollapsePattern.Pattern );
 
         expandPattern.Expand();
@@ -197,26 +197,26 @@ namespace DesignOptionModifier
         CacheRequest cacheRequest = new CacheRequest();
         cacheRequest.Add( AutomationElement.NameProperty );
 
-        cacheRequest.TreeScope = TreeScope.Element 
+        cacheRequest.TreeScope = TreeScope.Element
           | TreeScope.Children;
 
         AutomationElement comboboxItems = comboBoxElement
           .GetUpdatedCache( cacheRequest );
 
-        foreach( AutomationElement item 
+        foreach( AutomationElement item
           in comboboxItems.CachedChildren )
         {
           if( item.Current.Name == "" )
           {
             CacheRequest cacheRequest2 = new CacheRequest();
             cacheRequest2.Add( AutomationElement.NameProperty );
-            cacheRequest2.TreeScope = TreeScope.Element 
+            cacheRequest2.TreeScope = TreeScope.Element
               | TreeScope.Children;
 
-            AutomationElement comboboxItems2 
+            AutomationElement comboboxItems2
               = item.GetUpdatedCache( cacheRequest );
 
-            foreach( AutomationElement item2 
+            foreach( AutomationElement item2
               in comboboxItems2.CachedChildren )
             {
               listBox1.Items.Add( item2.Current.Name );
@@ -230,11 +230,11 @@ namespace DesignOptionModifier
 
     private void GetSelection()
     {
-      if( ( comboBoxElement != null ) 
+      if( ( comboBoxElement != null )
         && ( comboBoxElement.Current.IsEnabled ) )
       {
         SelectionPattern selPattern = comboBoxElement
-          .GetCurrentPattern( SelectionPattern.Pattern ) 
+          .GetCurrentPattern( SelectionPattern.Pattern )
             as SelectionPattern;
 
         AutomationElement[] items = selPattern.Current
@@ -260,41 +260,41 @@ namespace DesignOptionModifier
 
     private void SetSelection( string option )
     {
-      if( ( comboBoxElement != null ) 
+      if( ( comboBoxElement != null )
         && ( comboBoxElement.Current.IsEnabled ) )
       {
         AutomationElement sel = null;
 
-        ExpandCollapsePattern expandPattern 
+        ExpandCollapsePattern expandPattern
           = (ExpandCollapsePattern) comboBoxElement
-            .GetCurrentPattern( 
+            .GetCurrentPattern(
               ExpandCollapsePattern.Pattern );
 
         expandPattern.Expand();
 
         CacheRequest cacheRequest = new CacheRequest();
         cacheRequest.Add( AutomationElement.NameProperty );
-        cacheRequest.TreeScope = TreeScope.Element 
+        cacheRequest.TreeScope = TreeScope.Element
           | TreeScope.Children;
 
-        AutomationElement comboboxItems 
-          = comboBoxElement.GetUpdatedCache( 
+        AutomationElement comboboxItems
+          = comboBoxElement.GetUpdatedCache(
             cacheRequest );
 
-        foreach( AutomationElement item 
+        foreach( AutomationElement item
           in comboboxItems.CachedChildren )
         {
           if( item.Current.Name == "" )
           {
             CacheRequest cacheRequest2 = new CacheRequest();
             cacheRequest2.Add( AutomationElement.NameProperty );
-            cacheRequest2.TreeScope = TreeScope.Element 
+            cacheRequest2.TreeScope = TreeScope.Element
               | TreeScope.Children;
 
-            AutomationElement comboboxItems2 
+            AutomationElement comboboxItems2
               = item.GetUpdatedCache( cacheRequest );
 
-            foreach( AutomationElement item2 
+            foreach( AutomationElement item2
               in comboboxItems2.CachedChildren )
             {
               if( item2.Current.Name == option )
@@ -308,7 +308,7 @@ namespace DesignOptionModifier
         if( sel != null )
         {
           SelectionItemPattern select =
-            (SelectionItemPattern) sel.GetCurrentPattern( 
+            (SelectionItemPattern) sel.GetCurrentPattern(
               SelectionItemPattern.Pattern );
 
           select.Select();
@@ -318,14 +318,14 @@ namespace DesignOptionModifier
       SetForegroundWindow( this.Handle );
     }
 
-    private void buttonSet_Click( 
-      object sender, 
+    private void buttonSet_Click(
+      object sender,
       EventArgs e )
     {
-      if( listBox1.Items.Count > 0 
+      if( listBox1.Items.Count > 0
         && listBox1.SelectedIndex > -1 )
       {
-        string option = (string) 
+        string option = (string)
           listBox1.Items[listBox1.SelectedIndex];
 
         SetSelection( option );
